@@ -26,6 +26,9 @@
     <Compile Include="apptest.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AppMain.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />
