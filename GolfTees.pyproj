@@ -22,7 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="golftees.py" />
+    <Compile Include="GolfTees.py" />
     <Compile Include="apptest.py">
       <SubType>Code</SubType>
     </Compile>
