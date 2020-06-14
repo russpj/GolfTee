@@ -6,6 +6,7 @@
 
 from GolfTees import Rule
 from GolfTees import Solve
+from GolfTees import Solution
 
 triangleRules = [
 	Rule(0, 1, 3),
@@ -28,8 +29,12 @@ triangleRules = [
 	Rule(9, 8, 7)
 	]
 
-# Start with one blank at the top
-board = [False, True, True, True, True, True, True, True, True, True]
+# one blank at the top
+board1 = [False, True, True, True, True, True, True, True, True, True]
+# one blank on the side
+board2 = [True, False, True, True, True, True, True, True, True, True]
+# one blank in the middle
+board3 = [True, True, True, True, False, True, True, True, True, True]
 
 def PegChar(peg):
 	if peg:
@@ -42,14 +47,30 @@ def PrintBoard(board):
 	print('  {} {}'.format(PegChar(board[1]), PegChar(board[2])))
 	print(' {} {} {}'.format(PegChar(board[3]), PegChar(board[4]), PegChar(board[5])))
 	print('{} {} {} {}'.format(PegChar(board[6]), PegChar(board[7]), PegChar(board[8]), PegChar(board[9])))
+	return
+
+def PrintSolution(solution):
+	for rule in solution:
+		print ('{} jumps over {} to  {}'.format(rule.start, rule.over, rule.end))
+
+def TestBoard(board, diagnose=False):
+	print ('Running Test')
+	PrintBoard (board)
+	solution = []
+	for result in Solve(board, triangleRules, solution):
+		if result == Solution.Solved or diagnose:
+			print (result)
+			PrintSolution(solution)
+			PrintBoard (board)
+	return
+
 
 def Test():
 	print ('Running Tests')
-	PrintBoard (board)
-	for solution in Solve(board, triangleRules, []):
-		PrintBoard (board)
+	TestBoard(board1, True)
+	TestBoard(board2)
+	TestBoard(board3)
 	return
-
 
 if __name__ == '__main__':
 	Test()
