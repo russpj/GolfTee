@@ -10,6 +10,8 @@ Necessary Files:
 
 command line: python apptest.py
 
+I've added a stub for AppMain.py, which will be the main python file for the GUI version.
+
 This should execute a series of tests, one in verbose mode
 
 I have not verified that this is actually outputting the expected results.
