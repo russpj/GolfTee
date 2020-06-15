@@ -59,16 +59,16 @@ class AppInfo:
 		self.speedInfo=speedInfo
 
 infoFromState = {
-	AppState.Ready: AppInfo(statusText='Ready with {algorithm}', 
+	AppState.Ready: AppInfo(statusText='Ready', 
 												 startInfo=ButtonInfo(text='Start', enabled=True),
 												 speedInfo=ButtonInfo(text='Change Speed', enabled=True)),
-	AppState.Running: AppInfo(statusText='Running {algorithm}', 
+	AppState.Running: AppInfo(statusText='Running', 
 												 startInfo=ButtonInfo(text='Pause', enabled=True),
 												 speedInfo=ButtonInfo(text='Change Speed', enabled=False)),
-	AppState.Paused: AppInfo(statusText='Paused {algorithm}', 
+	AppState.Paused: AppInfo(statusText='Paused', 
 												 startInfo=ButtonInfo(text='Resume', enabled=True),
 												 speedInfo=ButtonInfo(text='Change Speed', enabled=True)),
-	AppState.Finished: AppInfo(statusText='Done with {algorithm}', 
+	AppState.Finished: AppInfo(statusText='Done', 
 												 startInfo=ButtonInfo(text='Reset', enabled=True),
 												 speedInfo=ButtonInfo(text='Change Speed', enabled=False))
 	}
@@ -79,12 +79,12 @@ class BoardLayout(BoxLayout):
 	def __init__(self, numCells):
 		super().__init__()
 		self.numCells = numCells
-		self.PlaceStuff()
 		self.bind(pos=self.update_rect, size=self.update_rect)
 
 	def update_rect(self, instance, value):
-		instance.rect.pos = instance.pos
-		instance.rect.size = instance.size
+		# instance.rect.pos = instance.pos
+		# instance.rect.size = instance.size
+		pass
 
 class HeaderLayout(BoxLayout):
 	def __init__(self, **kwargs):
@@ -216,8 +216,6 @@ class GolfTeesGame(App):
 	def StartButtonCallback(self, instance):
 		if self.state==AppState.Ready:
 			self.array = list(range(self.simulationLength))
-			algorithm = infoFromAlgorithm[self.algorithm].algorithm
-			self.generator=algorithm(self.array, self.rotationShift)
 			self.StartClock()
 		if self.state==AppState.Running:
 			self.clock.cancel()
