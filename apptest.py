@@ -72,21 +72,21 @@ def PrintHexBoard(board):
 	currentRow = 0
 	minCol = 100000000
 	for hole in board.holes:
-		if pumpNeedsPriming or hole[0] != currentRow:
+		if pumpNeedsPriming or hole.row != currentRow:
 			rowStrings.append([hole])
-			currentRow = hole[0]
-			firstCol = hole[1]
+			currentRow = hole.row
+			firstCol = hole.col
 			if firstCol < minCol:
 				minCol = firstCol
 			pumpNeedsPriming = False
 		else:
 			rowStrings[-1].append(hole)
 	for rowString in rowStrings:
-		colDiff = rowString[0][1] - minCol
+		colDiff = rowString[0].col - minCol
 		for space in range(colDiff):
 			print(' ', end='')
 		for hole in rowString:
-			print ('X ', end='')
+			print ('{} '.format(PegChar(hole.filled)), end='')
 		print()
 
 	return

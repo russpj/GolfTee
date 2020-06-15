@@ -59,17 +59,25 @@ def Solve(board, rules, solution):
 	return
 
 
-class HexBoard:
-	def __init__(self, holes):
-		self.holes = []
-		for hole in holes:
-			if self.IsValidHole(hole):
-				self.holes.append(hole)
+
+class Hole:
+	def __init__(self, row, col, filled):
+		self.row=row
+		self.col = col
+		self.filled = filled
 		return
 
-	def IsValidHole(self, hole):
-		bothEven = (hole[0]%2 == 0 and hole[1]%2 == 0)
-		bothOdd = (hole[0]%2 == 1 and hole[1]%2 == 1)
+class HexBoard:
+	def __init__(self, locations):
+		self.holes = []
+		for location in locations:
+			if self.IsValidLocation(location):
+				self.holes.append(Hole(location[0], location[1], True))
+		return
+
+	def IsValidLocation(self, location):
+		bothEven = (location[0]%2 == 0 and location[1]%2 == 0)
+		bothOdd = (location[0]%2 == 1 and location[1]%2 == 1)
 		return bothEven or bothOdd
 
 
