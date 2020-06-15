@@ -4,14 +4,6 @@
 	Implements the algorithm for solving the golf tees puzzle
 '''
 
-'''
-	This is the classic triangular board
-										0
-									1   2
-							  3   4   5
-							6   7   8   9
-'''
-
 from enum import Enum
 
 

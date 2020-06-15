@@ -14,7 +14,7 @@ I've added a stub for AppMain.py, which will be the main python file for the GUI
 
 This should execute a series of tests, one in verbose mode
 
-I have not verified that this is actually outputting the expected results.
+I believe that this is actually outputting the expected results.
 
 Method:
 	This uses a backtracking solver [Solve()] implemented as a python generator
@@ -25,3 +25,8 @@ Method:
 
 	Currently, the board printing is fixed, so this really only works with one board.
 	Note that the printing and rules are defined outside of the solver code.
+
+Notes:
+	The only board implemented here is a four row, ten hole board. The 5 row, 15-hole board
+	is more common, especially at Cracker Barrel restaurants. I should add that possibility 
+	sometime.
