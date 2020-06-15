@@ -7,6 +7,7 @@
 from GolfTees import Rule
 from GolfTees import Solve
 from GolfTees import Solution
+from GolfTees import CreateTriangleBoard
 
 '''
 	This is the classic 10-hole triangular board
@@ -54,7 +55,7 @@ def PegChar(peg):
 	else:
 		return 'O'
 
-def PrintRowForTriange(board, start, end):
+def PrintRowForTriange(board, row):
 	
 	return
 
@@ -63,6 +64,31 @@ def PrintBoard(board):
 	print('  {} {}'.format(PegChar(board[1]), PegChar(board[2])))
 	print(' {} {} {}'.format(PegChar(board[3]), PegChar(board[4]), PegChar(board[5])))
 	print('{} {} {} {}'.format(PegChar(board[6]), PegChar(board[7]), PegChar(board[8]), PegChar(board[9])))
+	return
+
+def PrintHexBoard(board):
+	rowStrings = []
+	pumpNeedsPriming = True
+	currentRow = 0
+	minCol = 100000000
+	for hole in board.holes:
+		if pumpNeedsPriming or hole[0] != currentRow:
+			rowStrings.append([hole])
+			currentRow = hole[0]
+			firstCol = hole[1]
+			if firstCol < minCol:
+				minCol = firstCol
+			pumpNeedsPriming = False
+		else:
+			rowStrings[-1].append(hole)
+	for rowString in rowStrings:
+		colDiff = rowString[0][1] - minCol
+		for space in range(colDiff):
+			print(' ', end='')
+		for hole in rowString:
+			print ('X ', end='')
+		print()
+
 	return
 
 def PrintSolution(solution):
@@ -89,6 +115,9 @@ def TestCases(rules, boards, diagnose=False):
 def Test():
 	print ('Running Tests')
 	TestCases(cases10[0], cases10[1])
+
+	testBoard = CreateTriangleBoard(4)
+	PrintHexBoard(testBoard)
 	return
 
 if __name__ == '__main__':
