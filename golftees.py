@@ -14,28 +14,13 @@ class Rule:
 		self.end = end
 		return
 
-def IsRuleValidOld(board, rule):
-	return board[rule.start] and board[rule.over] and not board[rule.end]
-
 def IsRuleValid(board, rule):
 	return board[rule.start].filled and board[rule.over].filled and not board[rule.end].filled
-
-def ApplyRuleOld(board, rule):
-	board[rule.start] = False
-	board[rule.over] = False
-	board[rule.end] = True
-	return
 
 def ApplyRule(board, rule):
 	board[rule.start].filled = False
 	board[rule.over].filled = False
 	board[rule.end].filled = True
-	return
-
-def UnApplyRuleOld(board, rule):
-	board[rule.end] = False
-	board[rule.over] = True
-	board[rule.start] = True
 	return
 
 def UnApplyRule(board, rule):
@@ -50,30 +35,9 @@ class Solution(Enum):
 	NewRule = 2
 	BackTrack = 3
 
-def IsBoardWinner(board):
-	count = 0
-	for hole in board:
-		if hole:
-			count += 1
-	return count == 1
 
 def IsBoardWinnerNew(holes):
 	return sum(1 for hole in holes if hole.filled) == 1
-
-def Solve(board, rules, solution):
-	if IsBoardWinner(board):
-		yield Solution.Solved
-
-	for rule in rules:
-		if (IsRuleValidOld(board, rule)):
-			ApplyRuleOld(board, rule)
-			solution.append(rule)
-			yield Solution.NewRule
-			yield from Solve(board, rules, solution)
-			solution.pop()
-			UnApplyRuleOld(board, rule)
-			yield Solution.BackTrack
-	return
 
 def SolveNew(holes, rules, solution):
 	if IsBoardWinnerNew(holes):
