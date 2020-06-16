@@ -14,16 +14,16 @@ class Rule:
 		self.end = end
 		return
 
-def IsRuleValid(board, rule):
+def IsRuleValidOld(board, rule):
 	return board[rule.start] and board[rule.over] and not board[rule.end]
 
-def ApplyRule(board, rule):
+def ApplyRuleOld(board, rule):
 	board[rule.start] = False
 	board[rule.over] = False
 	board[rule.end] = True
 	return
 
-def UnapplyRule(board, rule):
+def UnApplyRuleOld(board, rule):
 	board[rule.end] = False
 	board[rule.over] = True
 	board[rule.start] = True
@@ -48,13 +48,13 @@ def Solve(board, rules, solution):
 		yield Solution.Solved
 
 	for rule in rules:
-		if (IsRuleValid(board, rule)):
-			ApplyRule(board, rule)
+		if (IsRuleValidOld(board, rule)):
+			ApplyRuleOld(board, rule)
 			solution.append(rule)
 			yield Solution.NewRule
 			yield from Solve(board, rules, solution)
 			solution.pop()
-			UnapplyRule(board, rule)
+			UnApplyRuleOld(board, rule)
 			yield Solution.BackTrack
 	return
 
