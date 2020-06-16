@@ -6,6 +6,7 @@
 
 from GolfTees import Rule
 from GolfTees import Solve
+from GolfTees import SolveNew
 from GolfTees import Solution
 from GolfTees import CreateTriangleBoard
 
@@ -106,6 +107,17 @@ def TestBoard(board, rules, diagnose=False):
 			PrintBoard (board)
 	return
 
+def TestBoardNew(board, diagnose=False):
+	print ('Running Test')
+	PrintHexBoard (board)
+	solution = []
+	for result in SolveNew(board.holes, board.rules, solution):
+		if result == Solution.Solved or diagnose:
+			print ('{} at level {}'.format(result, len(solution)))
+			PrintSolution(solution)
+			PrintHexBoard (board)
+	return
+
 
 def TestCases(rules, boards, diagnose=False):
 	for board in boards:
@@ -121,9 +133,10 @@ def Test():
 	testBoards.append(CreateTriangleBoard(4, 1))
 	testBoards.append(CreateTriangleBoard(4, 4))
 	testBoards.append(CreateTriangleBoard(5, 4))
+
 	for board in testBoards:
-		PrintHexBoard(board)
-		PrintSolution(board.rules)
+		TestBoardNew(board)
+
 	return
 
 if __name__ == '__main__':

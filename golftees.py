@@ -17,16 +17,31 @@ class Rule:
 def IsRuleValidOld(board, rule):
 	return board[rule.start] and board[rule.over] and not board[rule.end]
 
+def IsRuleValid(board, rule):
+	return board[rule.start].filled and board[rule.over].filled and not board[rule.end].filled
+
 def ApplyRuleOld(board, rule):
 	board[rule.start] = False
 	board[rule.over] = False
 	board[rule.end] = True
 	return
 
+def ApplyRule(board, rule):
+	board[rule.start].filled = False
+	board[rule.over].filled = False
+	board[rule.end].filled = True
+	return
+
 def UnApplyRuleOld(board, rule):
 	board[rule.end] = False
 	board[rule.over] = True
 	board[rule.start] = True
+	return
+
+def UnApplyRule(board, rule):
+	board[rule.end].filled = False
+	board[rule.over].filled = True
+	board[rule.start].filled = True
 	return
 
 
@@ -42,6 +57,8 @@ def IsBoardWinner(board):
 			count += 1
 	return count == 1
 
+def IsBoardWinnerNew(holes):
+	return sum(1 for hole in holes if hole.filled) == 1
 
 def Solve(board, rules, solution):
 	if IsBoardWinner(board):
@@ -55,6 +72,21 @@ def Solve(board, rules, solution):
 			yield from Solve(board, rules, solution)
 			solution.pop()
 			UnApplyRuleOld(board, rule)
+			yield Solution.BackTrack
+	return
+
+def SolveNew(holes, rules, solution):
+	if IsBoardWinnerNew(holes):
+		yield Solution.Solved
+
+	for rule in rules:
+		if (IsRuleValid(holes, rule)):
+			ApplyRule(holes, rule)
+			solution.append(rule)
+			yield Solution.NewRule
+			yield from SolveNew(holes, rules, solution)
+			solution.pop()
+			UnApplyRule(holes, rule)
 			yield Solution.BackTrack
 	return
 
