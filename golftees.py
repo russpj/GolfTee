@@ -36,11 +36,11 @@ class Solution(Enum):
 	BackTrack = 3
 
 
-def IsBoardWinnerNew(holes):
+def IsBoardWinner(holes):
 	return sum(1 for hole in holes if hole.filled) == 1
 
-def SolveNew(holes, rules, solution):
-	if IsBoardWinnerNew(holes):
+def Solve(holes, rules, solution):
+	if IsBoardWinner(holes):
 		yield Solution.Solved
 
 	for rule in rules:
@@ -48,7 +48,7 @@ def SolveNew(holes, rules, solution):
 			ApplyRule(holes, rule)
 			solution.append(rule)
 			yield Solution.NewRule
-			yield from SolveNew(holes, rules, solution)
+			yield from Solve(holes, rules, solution)
 			solution.pop()
 			UnApplyRule(holes, rule)
 			yield Solution.BackTrack

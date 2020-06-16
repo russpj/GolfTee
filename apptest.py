@@ -5,7 +5,7 @@
 '''
 
 from GolfTees import Rule
-from GolfTees import SolveNew
+from GolfTees import Solve
 from GolfTees import Solution
 from GolfTees import CreateTriangleBoard
 
@@ -52,11 +52,11 @@ def PrintSolution(solution):
 	for rule in solution:
 		print ('{} jumps over {} to  {}'.format(rule.start, rule.over, rule.end))
 
-def TestBoardNew(board, diagnose=False):
+def TestBoard(board, diagnose=False):
 	print ('Running Test')
 	PrintHexBoard (board)
 	solution = []
-	for result in SolveNew(board.holes, board.rules, solution):
+	for result in Solve(board.holes, board.rules, solution):
 		if result == Solution.Solved or diagnose:
 			print ('{} at level {}'.format(result, len(solution)))
 			PrintSolution(solution)
@@ -74,7 +74,7 @@ def Test():
 	testBoards.append(CreateTriangleBoard(5, 4))
 
 	for board in testBoards:
-		TestBoardNew(board)
+		TestBoard(board)
 
 	return
 
