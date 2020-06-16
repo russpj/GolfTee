@@ -116,8 +116,13 @@ def Test():
 	print ('Running Tests')
 	TestCases(cases10[0], cases10[1])
 
-	testBoard = CreateTriangleBoard(4)
-	PrintHexBoard(testBoard)
+	testBoards = []
+	testBoards.append(CreateTriangleBoard(4, 0))
+	testBoards.append(CreateTriangleBoard(4, 1))
+	testBoards.append(CreateTriangleBoard(4, 4))
+	testBoards.append(CreateTriangleBoard(5, 4))
+	for board in testBoards:
+		PrintHexBoard(board)
 	return
 
 if __name__ == '__main__':

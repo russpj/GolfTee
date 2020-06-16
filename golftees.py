@@ -80,12 +80,20 @@ class HexBoard:
 		bothOdd = (location[0]%2 == 1 and location[1]%2 == 1)
 		return bothEven or bothOdd
 
+	def RemovePeg(self, peg):
+		self.holes[peg].filled = False
 
-def CreateTriangleBoard(rows):
+
+def CreateTriangleBoard(rows, pegToRemove=-1):
 	holes = []
 	for row in range(rows):
 		firstCol = -row
 		for col in range(row+1):
 			holes.append([row, firstCol + col*2])
-	return HexBoard(holes)
+	
+			board = HexBoard(holes)
+	if pegToRemove != -1:
+		board.RemovePeg(pegToRemove)
+
+	return board
 			
