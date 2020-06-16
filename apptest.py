@@ -123,6 +123,7 @@ def Test():
 	testBoards.append(CreateTriangleBoard(5, 4))
 	for board in testBoards:
 		PrintHexBoard(board)
+		PrintSolution(board.rules)
 	return
 
 if __name__ == '__main__':

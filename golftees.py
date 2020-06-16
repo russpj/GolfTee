@@ -59,6 +59,14 @@ def Solve(board, rules, solution):
 	return
 
 
+hexDirections = [
+		[-1, -1],
+		[-1, 1],
+		[0, -2],
+		[0, 2],
+		[1, -1],
+		[1, 1]
+	]
 
 class Hole:
 	def __init__(self, row, col, filled):
@@ -73,6 +81,7 @@ class HexBoard:
 		for location in locations:
 			if self.IsValidLocation(location):
 				self.holes.append(Hole(location[0], location[1], True))
+		self.AddRules()
 		return
 
 	def IsValidLocation(self, location):
@@ -82,6 +91,30 @@ class HexBoard:
 
 	def RemovePeg(self, peg):
 		self.holes[peg].filled = False
+
+	def FindLocation(self, row, col):
+		for index in range(len(self.holes)):
+			hole = self.holes[index]
+			if hole.row == row and hole.col == col:
+				return index
+		return -1
+
+	def AddRule(self, start, direction):
+		startHole = self.holes[start]
+		over = self.FindLocation(startHole.row+direction[0], startHole.col+direction[1])
+		if over != -1:
+			overHole = self.holes[over]
+			end = self.FindLocation(overHole.row+direction[0], overHole.col+direction[1])
+			if end != -1:
+				self.rules.append(Rule(start, over, end))
+		return
+
+	def AddRules(self):
+		self.rules = []
+		for start in range(len(self.holes)):
+			for direction in hexDirections:
+				self.AddRule(start, direction)
+		return
 
 
 def CreateTriangleBoard(rows, pegToRemove=-1):
