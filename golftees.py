@@ -8,6 +8,9 @@ from enum import Enum
 
 
 class Rule:
+	"""
+	A Rule is a triple of an allowed jump
+	"""
 	def __init__(self, start, over, end):
 		self.start = start
 		self.over = over
@@ -31,6 +34,9 @@ def UnApplyRule(board, rule):
 
 
 class Solution(Enum):
+	"""
+	We're going to have a generator that yields intermediate results.
+	"""
 	Solved = 1
 	NewRule = 2
 	BackTrack = 3
@@ -40,6 +46,12 @@ def IsBoardWinner(holes):
 	return sum(1 for hole in holes if hole.filled) == 1
 
 def Solve(holes, rules, solution):
+	"""
+	The generator that solves a puzzle
+
+	It will find every solution, and yield intermediate results
+	so that the client can update the progress of the solving.
+	"""
 	if IsBoardWinner(holes):
 		yield Solution.Solved
 
@@ -72,6 +84,19 @@ class Hole:
 		return
 
 class HexBoard:
+	"""
+	This board represents a hexagonal grid, and knows how
+	holes line up on the grid.
+
+	It uses a staggered numbering scheme. Even rows only have the even numbered
+	columns. Odd rows only odd columns.
+
+	The main data struct is the list of holes. The game sets up which locations on 
+	the grid are holes for the game.
+
+	The initializer takes a list of co-ordinates, validates them, and sets them up
+	on the board as filled.
+	"""
 	def __init__(self, locations):
 		self.holes = []
 		for location in locations:
@@ -114,6 +139,11 @@ class HexBoard:
 
 
 def CreateTriangleBoard(rows, pegToRemove=-1):
+	"""
+	This creates a triangle on a hex board with the required number of rows.
+
+	The classic game had five rows.
+	"""
 	holes = []
 	for row in range(rows):
 		firstCol = -row
