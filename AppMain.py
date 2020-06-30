@@ -3,11 +3,13 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics import Color, Rectangle, Line
+from kivy.graphics import Color, Rectangle, RoundedRectangle, Line
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.clock import Clock
+
+from GolfTees import CreateTriangleBoard
 
 class AppState(Enum):
 	Ready = 1
@@ -74,12 +76,59 @@ infoFromState = {
 	}
 
 
+class RoundedRectLabel(Label):
+	"""
+	Creates a rounded rectangle whose color can be changed. 
+	Possibly should be based on a button in the long run.
+	"""
+	def __init__(self, text_color=[0.0, 0.0, 0.0, 1.0], back_color=[1.0, 1.0, 1.0, 1.0], **kwargs):
+		super().__init__(color=text_color, **kwargs)
+		self.back_color = back_color
+		self.CreateBackground(back_color, force=True)
+		self.bind(pos=self.update_rect, size=self.update_rect)
+		return
+
+	def CreateBackground(self, color=[1,1,1,1], force=False):
+		if force or self.back_color != color:
+			self.back_color = color
+			self.canvas.before.clear()
+			with self.canvas.before:
+				Color(color[0], color[1], color[2], color[3])
+				self.background = RoundedRectangle(size=self.size, pos=self.pos)
+
+	def update_rect(self, instance, value):
+		self.background.pos = instance.pos
+		self.background.size = instance.size
+		self.font_size = instance.size[1]/2
+		return
+
+	def SetColors(self, text_color=[0.0, 0.0, 0.0, 1.0],
+							 back_color=[1.0, 1.0, 1.0, 1.0]):
+		self.color = text_color
+		self.CreateBackground(back_color)
+
+
 # BoardLayout encapsulates the playing board
 class BoardLayout(BoxLayout):
-	def __init__(self, numCells):
+	def __init__(self, board):
 		super().__init__()
-		self.numCells = numCells
+		self.MakeBoard(board)
 		self.bind(pos=self.update_rect, size=self.update_rect)
+
+	def MakeBoard(self, board):
+		self.pegHoles = []
+		if len(board.holes) > 0:
+			self.minRow = min([hole.row for hole in board.holes])
+			self.maxRow = max([hole.row for hole in board.holes])
+			self.minCol = min([hole.col for hole in board.holes])
+			self.maxCol = max([hole.col for hole in board.holes])
+
+			for hole in board.holes:
+				newPegHole = RoundedRectLabel(text_color = [0, 0, 0, 1], back_color = [1, 0, 0, 1])
+				newPegHole.hole = hole
+				self.add_widget(newPegHole)
+				self.pegHoles.append(newPegHole)
+		return
 
 	def update_rect(self, instance, value):
 		# instance.rect.pos = instance.pos
@@ -161,14 +210,15 @@ class GolfTeesGame(App):
 		self.rotationShift = 150
 		self.array = list(range(self.simulationLength))
 		self.speed = Speed.Slow
+		self.gameBoard = CreateTriangleBoard(4)
 
 		# header
 		self.header = HeaderLayout(size_hint=(1, .1))
 		layout.add_widget(self.header)
 
 		# board
-		self.boardLayout = boardLayout = BoardLayout(len(self.array))
-		layout.add_widget(boardLayout)
+		self.board = BoardLayout(self.gameBoard)
+		layout.add_widget(self.board)
 
 		# footer
 		self.footer = FooterLayout(size_hint=(1, .2), 
