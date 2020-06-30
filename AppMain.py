@@ -1,6 +1,6 @@
 from enum import Enum
 from kivy.app import App
-from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, Rectangle, RoundedRectangle, Line
@@ -109,7 +109,7 @@ class RoundedRectLabel(Label):
 
 
 # BoardLayout encapsulates the playing board
-class BoardLayout(BoxLayout):
+class BoardLayout(FloatLayout):
 	def __init__(self, board):
 		super().__init__()
 		self.MakeBoard(board)
@@ -126,11 +126,27 @@ class BoardLayout(BoxLayout):
 			for hole in board.holes:
 				newPegHole = RoundedRectLabel(text_color = [0, 0, 0, 1], back_color = [1, 0, 0, 1])
 				newPegHole.hole = hole
+				newPegHole.size_hint = (None, None)
 				self.add_widget(newPegHole)
 				self.pegHoles.append(newPegHole)
 		return
 
 	def update_rect(self, instance, value):
+		xPos = self.pos[0]
+		yPos = self.pos[1]
+		xSize = self.size[0]
+		ySize = self.size[1]
+		rowRange = self.maxRow - self.minRow + 1
+		colRange = self.maxCol - self.minCol + 1
+		for pegHole in self.pegHoles:
+			hole = pegHole.hole
+			xPosHole = xPos + (hole.col-self.minCol)*xSize/colRange
+			xPosHoleNext = xPos + (hole.col+1-self.minCol)*xSize/colRange
+			yPosHole = yPos + (hole.row-self.minRow)*ySize/rowRange
+			yPosHoleNext = yPos + (hole.row+1-self.minRow)*ySize/rowRange
+			pegHole.pos = (xPosHole, yPosHole)
+			pegHole.size = (xPosHoleNext-xPosHole, yPosHoleNext-yPosHole)
+
 		# instance.rect.pos = instance.pos
 		# instance.rect.size = instance.size
 		pass
